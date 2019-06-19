@@ -166,7 +166,7 @@ xIFS=$IFS
           install_direct_from_pkg $i
         else
           echo "Not a .dmg or .pkg file linked. Searching page..."
-          search_page_for_link $i
+          search_page_for_link
         fi
     done;
 IFS=$xIFS
