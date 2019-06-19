@@ -130,6 +130,28 @@ function install_direct_from_pkg () {
 }
 
 
+Search for link
+function search_page_for_link () {
+curl -s $i | \
+    # Filter hyperlinks
+    egrep -o 'href="http[^"]://[^"]+\.(dmg|pkg)"' | \
+    egrep -o 'http[^"]://[^"]+' | \
+    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1
+    if [ "${i##*.}" = dmg ]
+        then
+        echo "${i##*.}"
+          install_from_dmg $i
+        elif [ "${i##*.}" = pkg ]
+        then
+        echo "${i##*.}"
+          install_direct_from_pkg $i
+        else
+          echo "No .dmg or .pkg file linked."
+        fi
+
+}
+
+
 xIFS=$IFS
     IFS=$'\n'
     for i in $(curl "${linklist}")
@@ -143,8 +165,8 @@ xIFS=$IFS
         echo "${i##*.}"
           install_direct_from_pkg $i
         else
-          echo "Not a .dmg or .pkg file linked."
+          echo "Not a .dmg or .pkg file linked. Searching page..."
+          search_page_for_link $i
         fi
     done;
 IFS=$xIFS
-
