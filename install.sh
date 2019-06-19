@@ -130,7 +130,7 @@ function install_direct_from_pkg () {
 }
 
 
-Search for link
+#Search for link
 function search_page_for_link () {
 curl -s $i | \
     # Filter hyperlinks
