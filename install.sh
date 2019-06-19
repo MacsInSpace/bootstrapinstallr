@@ -130,13 +130,14 @@ function install_direct_from_pkg () {
 }
 
 
+
 #Search for link
 function search_page_for_link () {
-curl -s $i | \
+i=`curl -s $i | \
     # Filter hyperlinks
     egrep -o 'href="http[^"]://[^"]+\.(dmg|pkg)"' | \
     egrep -o 'http[^"]://[^"]+' | \
-    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1
+    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1`
     if [ "${i##*.}" = dmg ]
         then
         echo "${i##*.}"
@@ -170,3 +171,4 @@ xIFS=$IFS
         fi
     done;
 IFS=$xIFS
+
