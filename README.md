@@ -8,3 +8,5 @@ Unfortunately doing the old  `bash <( curl https://raw.githubusercontent.com/Mac
 <br/><br/>
 
 Supports DMGs containing Apps/pkgs and mpkgs or stand alone pkg link lists.
+
+#Added a function to search a page for a link... (milage may vary on this one. You've been warned..)
