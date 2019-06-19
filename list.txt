@@ -1,0 +1,3 @@
+https://dl.google.com/chrome/mac/stable/googlechrome.dmg
+https://www.virtualbox.org/wiki/Downloads
+https://github.com/munki/munki/releases/download/v3.6.2/munkitools-3.6.2.3776.pkg
