@@ -11,7 +11,7 @@
 #Run the following from recovery
 #The second argument is a list of DMGs or PKGs that you want on the 'image'
 
-# curl https://github.com/MacsInSpace/bootstrapinstallr/install.sh | bash -s  http://Link.To.Install.local/list.txt
+# curl https://raw.githubusercontent.com/MacsInSpace/bootstrapinstallr/master/install.sh | bash -s  http://Link.To.Install.local/list.txt
 
 
 
