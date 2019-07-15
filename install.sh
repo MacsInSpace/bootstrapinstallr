@@ -137,7 +137,8 @@ i=`curl -s $i | \
     # Filter hyperlinks
     egrep -o 'href="http[^"]://[^"]+\.(dmg|pkg)"' | \
     egrep -o 'http[^"]://[^"]+' | \
-    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1`
+    sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | head -1`
+
     if [ "${i##*.}" = dmg ]
         then
         echo "${i##*.}"
