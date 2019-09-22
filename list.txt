@@ -1,5 +1,5 @@
 https://www.virtualbox.org/wiki/Downloads
 https://github.com/munki/munki/releases/download/v3.6.2/munkitools-3.6.2.3776.pkg
-https://github.com/munki/munki/releases
+https://github.com/kcrawford/dockutil/releases
 http://www.videolan.org/vlc/download-macosx.html
 https://dl.google.com/chrome/mac/stable/googlechrome.dmg
