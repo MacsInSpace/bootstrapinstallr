@@ -19,6 +19,7 @@
 #Intall from this list.....
 linklist=$1
 
+
 function with_backoff {
   local max_attempts=${ATTEMPTS-5}
   local timeout=${TIMEOUT-1}
@@ -63,7 +64,7 @@ function install_from_dmg () {
     with_backoff curl -L "${URL}" -s -o ${TEMP}/app.dmg --connect-timeout 20 2>&1
     
     echo "Mounting ${MOUNT_PATH}"
-    Yes | /usr/bin/hdiutil attach ${TEMP}/app.dmg -noverify -nobrowse -mountpoint "${MOUNT_PATH}" > /dev/null 
+    yes | /usr/bin/hdiutil attach ${TEMP}/app.dmg -noverify -nobrowse -mountpoint "${MOUNT_PATH}"  & sleep 5 ; kill $! > /dev/null 2>&1 
 
     MPKG_PATH="$(find "${MOUNT_PATH}" -name "*.mpkg" ! -name "*readme*" ! -name "*read me*" ! -name "*ReadMe*" ! -name "*Read Me*" ! -name "*uninstall*" ! -name "*Uninstall*" -maxdepth 1 2> /dev/null || echo "")"
     PKG_PATH="$(find "${MOUNT_PATH}" -name "*.pkg" ! -name "*readme*" ! -name "*read me*" ! -name "*ReadMe*" ! -name "*Read Me*" ! -name "*uninstall*" ! -name "*Uninstall*" -maxdepth 1 2> /dev/null || echo "")"
@@ -74,9 +75,9 @@ function install_from_dmg () {
         [ "${APP_PATH}" != "" ]
     then
         echo "Rsync app to /Applications/${APP_NAME}"
-        #rsync -av "${APP_PATH}/" "/Applications/${APP_NAME}/"
-        #cp -pPR "${APP_PATH}" "/Applications/"
-        ditto -rsrc "${APP_PATH}" "/Applications/${APP_NAME}"
+        #/usr/bin/rsync -av "${APP_PATH}/" "/Applications"
+        /bin/cp -pPR "${APP_PATH}" "/Applications"
+        #/usr/bin/ditto -rsrc "${APP_PATH}" "/Applications/${APP_NAME}"
     elif
         [ "${MPKG_PATH}" != "" ]
     then
@@ -130,26 +131,53 @@ function install_direct_from_pkg () {
 }
 
 
+function search_relative () {
 
-#Search for link
+dom=`echo "$i" | awk -F/ '{print $1"//"$3}'`
+l=`curl -s $i | \
+    egrep -o 'href="/[^"]+\.(dmg|pkg)"' | \
+    sed "s|href=\"|$dom|g" | \
+    egrep -o '[^"]+\.(dmg|pkg)' | \
+    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1`
+xIFS=$IFS
+	 IFS=$'\n'
+	if [ "${l##*.}" = dmg ]
+        then
+        echo "${l##*.}"
+          install_from_dmg $l
+        elif [ "${l##*.}" = pkg ]
+        then
+        echo "${l##*.}"
+          install_direct_from_pkg $l
+        else
+          echo "No .dmg or .pkg file linked or found in extended search."
+        fi
+IFS=$xIFS
+}
+
 function search_page_for_link () {
-i=`curl -s $i | \
+xIFS=$IFS
+    IFS=$'\n'
+l=`curl -s $i | \
     # Filter hyperlinks
     egrep -o 'href="http[^"]://[^"]+\.(dmg|pkg)"' | \
-    egrep -o 'http[^"]://[^"]+' | \
-    sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | head -1`
-
-    if [ "${i##*.}" = dmg ]
+    egrep -o 'http[^"]://[^"]+\.(dmg|pkg)'  | \
+    sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1`
+    xIFS=$IFS
+	 IFS=$'\n'
+	if [ "${l##*.}" = dmg ]
         then
-        echo "${i##*.}"
-          install_from_dmg $i
-        elif [ "${i##*.}" = pkg ]
+        echo "${l##*.}"
+          install_from_dmg $l
+        elif [ "${l##*.}" = pkg ]
         then
-        echo "${i##*.}"
-          install_direct_from_pkg $i
+        echo "${l##*.}"
+          install_direct_from_pkg $l
         else
-          echo "No .dmg or .pkg file linked."
+        echo "No .dmg or .pkg file linked or found in search. Searching for relative paths. AKA github"
+        search_relative i$
         fi
+IFS=$xIFS
 
 }
 
@@ -169,7 +197,7 @@ xIFS=$IFS
         else
           echo "Not a .dmg or .pkg file linked. Searching page..."
           search_page_for_link
+          echo "Not a .dmg or .pkg file linked."
         fi
     done;
 IFS=$xIFS
-
