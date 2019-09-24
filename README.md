@@ -13,4 +13,9 @@ example usage:<br/><br/>
 
 `curl https://raw.githubusercontent.com/MacsInSpace/bootstrapinstallr/master/install.sh | bash -s  https://raw.githubusercontent.com/MacsInSpace/bootstrapinstallr/master/list.txt`
  or add the link list to the script on line ~20 
-
+<br/><br/>
+#credits
+# for use alone or as a postflight script in a pkg with https://github.com/munki/installr
+#https://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs
+#https://coderwall.com/p/ftrahg/install-all-the-dmg-s
+#https://apple.stackexchange.com/questions/73926/is-there-a-command-to-install-a-dmg
