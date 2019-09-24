@@ -16,7 +16,8 @@
 
 
 #Intall from this list.....
-linklist=$1
+linklist=$1 #or
+#linklist=http://Link.To.Install.local/list.txt  #format similar to https://raw.githubusercontent.com/MacsInSpace/bootstrapinstallr/master/list.txt
 
 
 function with_backoff {
