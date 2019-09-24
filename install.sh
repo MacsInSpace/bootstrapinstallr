@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #credits
-#https://github.com/munki/bootstrappr
-#https://github.com/munki/installr
+# for use alone or with https://github.com/munki/installr
 #https://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs
 #https://coderwall.com/p/ftrahg/install-all-the-dmg-s
 #https://apple.stackexchange.com/questions/73926/is-there-a-command-to-install-a-dmg
